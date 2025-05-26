@@ -1,0 +1,53 @@
+/* src/pages/LoginPage.css */
+.login-page-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh; /* 使其至少占据大部分视口高度 */
+    text-align: center;
+    font-family: sans-serif;
+  }
+  
+  .login-form {
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    width: 100%;
+    max-width: 400px; /* 限制表单最大宽度 */
+  }
+  
+  .login-form h1 {
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .login-form p {
+    margin-bottom: 30px;
+    color: #666;
+  }
+  
+  .google-login-button {
+    background-color: #4285F4; /* Google Blue */
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%; /* 使按钮占据表单宽度 */
+    box-sizing: border-box;
+  }
+  
+  .google-login-button:hover {
+    background-color: #357ae8;
+  }
+  
+  /* 如果您添加了Google图标，可能需要调整样式 */
+  .google-login-button svg {
+    margin-right: 8px;
+  }

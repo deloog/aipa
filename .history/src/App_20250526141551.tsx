@@ -19,15 +19,17 @@ function App() {
   return (
     <BrowserRouter>
       <div>
+        {/* 可选：添加一个简单的导航栏用于测试路由切换 */}
         <nav style={{ marginBottom: '20px', borderBottom: '1px solid #ccc', paddingBottom: '10px' }}>
           <Link to="/" style={{ marginRight: '10px' }}>仪表盘 (/) </Link>
           <Link to="/login">登录 (/login)</Link>
         </nav>
 
+        {/* 路由定义区域 */}
         <Routes>
-          {/* 2. 更新 login 路由的 element */}
-          <Route path="/login" element={<LoginPage />} />
+          <Route path="/login" element={<DashboardPagePlaceholder />} />
           <Route path="/" element={<DashboardPagePlaceholder />} />
+          {/* 未来可以在这里添加更多的应用内路由 */}
         </Routes>
       </div>
     </BrowserRouter>
