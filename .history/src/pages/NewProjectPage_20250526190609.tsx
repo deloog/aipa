@@ -1,18 +1,15 @@
-// src/pages/NewProjectPage.tsx
 import React, { useState } from 'react';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper'; // 确保 Paper 已导入，如果之前 NewProjectPage 的样式修改中使用了它
-                                      // 从您之前的确认来看，NewProjectPage 的样式修改是成功的，应该已经有Paper了
-import { useNavigate } from 'react-router-dom'; // 1. 导入 useNavigate
+import Paper from '@mui/material/Paper'; // 1. 导入 Paper 组件用于卡片效果
 
+// 导入我们创建的模拟服务函数 (路径可能需要根据您的项目结构调整)
 import { createProject } from '../services/project.service';
 import { initiateDialogue } from '../services/dialogue.service';
 
 const NewProjectPage: React.FC = () => {
-  const navigate = useNavigate(); // 2. 获取 navigate 函数
   const [projectName, setProjectName] = useState('');
   const [initialIdea, setInitialIdea] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -34,31 +31,13 @@ const NewProjectPage: React.FC = () => {
       alert('初步项目想法不能为空！');
       return;
     }
-
     setIsLoading(true);
-    console.log('开始提交项目信息...');
-    console.log('项目名称:', projectName);
-    console.log('初步项目想法:', initialIdea);
-
     try {
       const projectResponse = await createProject(projectName);
       const projectId = projectResponse.projectId;
-      console.log('模拟创建项目成功，获得 Project ID:', projectId);
-
       const dialogueResponse = await initiateDialogue(projectId, initialIdea);
       const aiMessage = dialogueResponse.aiMessage;
-      console.log('模拟初始化对话成功，AI的首次回应:', aiMessage);
-
-      // 3. 使用 navigate 进行跳转，并传递数据
-      // 我们将 projectId 通过 URL 路径传递
-      // 将 initialAiMessage 和 projectName 通过路由的 state 对象传递
-      navigate(`/dialogue/${projectId}`, { 
-        state: { 
-          initialAiMessage: aiMessage,
-          projectName: projectName // 传递项目名称，方便在对话页显示
-        } 
-      });
-
+      alert(`项目创建和对话初始化模拟成功！\nProject ID: ${projectId}\nAI回应: ${aiMessage}\n（下一步将实现导航到对话页面）`);
     } catch (error) {
       console.error('模拟API调用过程中发生错误:', error);
       alert('提交过程中发生错误（模拟），详情请查看控制台。');
@@ -68,28 +47,31 @@ const NewProjectPage: React.FC = () => {
   };
 
   return (
-    // 页面整体布局 (与您之前确认的样式一致)
+    // 2. 外层Box作为页面容器，设置背景色和flex布局使其内容垂直水平居中
     <Box
       sx={{
-        minHeight: '100vh',
+        minHeight: '100vh', // 至少占据整个视口高度
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: 'linear-gradient(to right bottom, #3A4A5E, #1C2833)',
-        padding: 2,
+        alignItems: 'center', // 水平居中
+        justifyContent: 'center', // 垂直居中 (如果内容不足以撑满高度)
+        // bgcolor: '#282c34', // 一个示例深色背景，您可以替换为您喜欢的颜色
+        // 或者使用渐变背景、图片背景等，这里用一个深灰色系
+        background: 'linear-gradient(to right bottom, #3A4A5E, #1C2833)', 
+        padding: 2, // 在视口边缘留一些内边距
       }}
     >
+      {/* 3. 使用Paper组件作为卡片容器 */}
       <Paper
-        elevation={6}
+        elevation={6} // elevation属性可以控制阴影深度，0-24
         sx={{
-          padding: 4,
+          padding: 4, // 卡片内部的内边距 (theme.spacing(4))
           display: 'flex',
           flexDirection: 'column',
-          alignItems: 'stretch',
+          alignItems: 'stretch', // 使内部元素（如按钮）可以撑满宽度
           width: '100%',
-          maxWidth: '600px',
-          borderRadius: '12px',
+          maxWidth: '600px', // 卡片的最大宽度
+          borderRadius: '12px', // 卡片的圆角
         }}
       >
         <Typography component="h1" variant="h4" gutterBottom sx={{ textAlign: 'center', mb: 3 }}>
@@ -120,9 +102,9 @@ const NewProjectPage: React.FC = () => {
           disabled={isLoading}
         />
 
-        <Box sx={{ mb: 3, textAlign: 'left' }}>
+        <Box sx={{ mb: 3, textAlign: 'left' }}> {/* 让上传按钮靠左 */}
           <Button
-            variant="outlined"
+            variant="outlined" // 使用描边按钮作为次要操作
             component="label"
             disabled={isLoading}
             size="medium"
@@ -134,16 +116,17 @@ const NewProjectPage: React.FC = () => {
 
         <Button
           variant="contained"
-          color="primary"
+          color="primary" // 使用主题的主色调
           size="large"
           onClick={handleSubmit}
           disabled={isLoading}
           sx={{ 
+            // alignSelf: 'flex-start', // 如果希望按钮不撑满，可以取消注释并调整
             paddingTop: '10px', 
             paddingBottom: '10px',
             fontSize: '1.1rem'
           }} 
-          fullWidth
+          fullWidth // 让主要操作按钮更突出
         >
           {isLoading ? '正在处理...' : '开始智能规划'}
         </Button>
