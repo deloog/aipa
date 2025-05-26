@@ -15,16 +15,13 @@ function App() {
       <div>
         <nav style={{ marginBottom: '20px', borderBottom: '1px solid #ccc', paddingBottom: '10px' }}>
           <Link to="/" style={{ marginRight: '10px' }}>仪表盘 (/) </Link>
-          <Link to="/login" style={{ marginRight: '10px' }}>登录 (/login)</Link>
-          {/* 方便测试，临时添加一个到新项目页面的链接 */}
-          <Link to="/projects/new">创建新项目 (/projects/new)</Link>
+          <Link to="/login">登录 (/login)</Link>
         </nav>
 
         <Routes>
           <Route path="/login" element={<LoginPage />} />
+          {/* 2. 更新根路径 / 的 element */}
           <Route path="/" element={<DashboardPage />} />
-          {/* 2. 为新项目页面添加路由规则 */}
-          <Route path="/projects/new" element={<NewProjectPage />} />
         </Routes>
       </div>
     </BrowserRouter>
