@@ -24,7 +24,6 @@ function App() {
           <Route path="/projects/new" element={<NewProjectPage />} />
           {/* 1. 为DialoguePage添加带projectId参数的路由 */}
           <Route path="/dialogue/:projectId" element={<DialoguePage />} />
-          <Route path="/review" element={<RequirementsReviewPage />} />
         </Routes>
       </div>
     </BrowserRouter>
