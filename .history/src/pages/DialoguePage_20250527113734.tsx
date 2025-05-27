@@ -1,6 +1,6 @@
 // src/pages/DialoguePage.tsx
 import React, { useState, useEffect, useRef } from 'react';
-import { useParams, useLocation,useNavigate } from 'react-router-dom'; // 1. 导入 useParams 和 useLocation
+import { useParams, useLocation } from 'react-router-dom'; // 1. 导入 useParams 和 useLocation
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
@@ -203,16 +203,6 @@ const DialoguePage: React.FC = () => {
             </Button>
           </Box>
         </Paper>
-        <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
-          <Button 
-            variant="contained" 
-            color="secondary" 
-            onClick={handleCompleteDialogueAndReview}
-            disabled={!projectId || messages.length < 2} // 简单示例：至少有一轮用户和AI的对话
-          >
-            模拟需求收集完成，前往审阅
-          </Button>
-        </Box>
       </Container>
     </Box>
   );

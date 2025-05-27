@@ -1,6 +1,6 @@
 // src/pages/DialoguePage.tsx
 import React, { useState, useEffect, useRef } from 'react';
-import { useParams, useLocation,useNavigate } from 'react-router-dom'; // 1. 导入 useParams 和 useLocation
+import { useParams, useLocation } from 'react-router-dom'; // 1. 导入 useParams 和 useLocation
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
@@ -108,21 +108,7 @@ const DialoguePage: React.FC = () => {
       setIsSending(false);
     }
   };
-  const handleCompleteDialogueAndReview = () => {
-    if (!projectId) {
-      alert('错误：项目ID未知，无法进入审阅。');
-      return;
-    }
-    console.log(`对话完成，准备为项目 ${projectId} 生成需求文档并导航到审阅页...`);
-    const mockGeneratedDoc = generateMockRequirementsForReview(pageProjectName);
 
-    navigate(`/projects/${projectId}/review`, {
-      state: {
-        documentData: mockGeneratedDoc, // 传递模拟生成的需求文档数据
-        projectName: pageProjectName,
-      }
-    });
-  };
   return (
     <Box
       sx={{ /* ... 背景和页面布局样式 ... */
@@ -203,16 +189,6 @@ const DialoguePage: React.FC = () => {
             </Button>
           </Box>
         </Paper>
-        <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
-          <Button 
-            variant="contained" 
-            color="secondary" 
-            onClick={handleCompleteDialogueAndReview}
-            disabled={!projectId || messages.length < 2} // 简单示例：至少有一轮用户和AI的对话
-          >
-            模拟需求收集完成，前往审阅
-          </Button>
-        </Box>
       </Container>
     </Box>
   );

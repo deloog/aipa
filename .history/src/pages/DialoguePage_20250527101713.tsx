@@ -1,6 +1,6 @@
 // src/pages/DialoguePage.tsx
 import React, { useState, useEffect, useRef } from 'react';
-import { useParams, useLocation,useNavigate } from 'react-router-dom'; // 1. 导入 useParams 和 useLocation
+import { useParams, useLocation } from 'react-router-dom'; // 1. 导入 useParams 和 useLocation
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
@@ -22,25 +22,17 @@ interface DialoguePageState {
   initialAiMessage?: string;
   projectName?: string;
 }
-const generateMockRequirementsForReview = (projectNameFromState?: string) => ({
-  title: `${projectNameFromState || '新项目'} - 项目需求规格说明书`,
-  chapters: [
-    { id: 'overview_generated', title: '1. 项目概述 (来自对话)', content: '这是根据对话生成的项目概述内容...' },
-    { id: 'users_generated', title: '2. 目标用户 (来自对话)', content: '这是根据对话生成的目标用户描述...' },
-  ],
-});
 
 const DialoguePage: React.FC = () => {
-  const navigate = useNavigate();
   const [messages, setMessages] = useState<DialogueMessage[]>([]);
   const [currentUserInput, setCurrentUserInput] = useState<string>('');
   const [isSending, setIsSending] = useState<boolean>(false);
 
   // 2. 从URL参数中获取projectId
   const { projectId } = useParams<{ projectId: string }>(); 
+  
   // 3. 从路由状态中获取传递过来的数据
   const location = useLocation();
-  console.log('在DialoguePage中接收到的路由state:', location.state);
   const locationState = location.state as DialoguePageState | undefined; // 类型断言
   const initialAiMessage = locationState?.initialAiMessage;
   const pageProjectName = locationState?.projectName || projectId; // 优先使用传递的项目名，否则用ID
@@ -108,21 +100,7 @@ const DialoguePage: React.FC = () => {
       setIsSending(false);
     }
   };
-  const handleCompleteDialogueAndReview = () => {
-    if (!projectId) {
-      alert('错误：项目ID未知，无法进入审阅。');
-      return;
-    }
-    console.log(`对话完成，准备为项目 ${projectId} 生成需求文档并导航到审阅页...`);
-    const mockGeneratedDoc = generateMockRequirementsForReview(pageProjectName);
 
-    navigate(`/projects/${projectId}/review`, {
-      state: {
-        documentData: mockGeneratedDoc, // 传递模拟生成的需求文档数据
-        projectName: pageProjectName,
-      }
-    });
-  };
   return (
     <Box
       sx={{ /* ... 背景和页面布局样式 ... */
@@ -203,16 +181,6 @@ const DialoguePage: React.FC = () => {
             </Button>
           </Box>
         </Paper>
-        <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
-          <Button 
-            variant="contained" 
-            color="secondary" 
-            onClick={handleCompleteDialogueAndReview}
-            disabled={!projectId || messages.length < 2} // 简单示例：至少有一轮用户和AI的对话
-          >
-            模拟需求收集完成，前往审阅
-          </Button>
-        </Box>
       </Container>
     </Box>
   );

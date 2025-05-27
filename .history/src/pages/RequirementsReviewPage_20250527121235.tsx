@@ -68,34 +68,24 @@ const RequirementsReviewPage: React.FC = () => {
   const { projectId } = useParams<{ projectId: string }>();
   const location = useLocation();
   const locationState = location.state as ReviewPageLocationState | undefined;
-  const currentDocumentData = locationState?.documentData || { title: `项目 ${projectId || ''} - 需求规格`, chapters: [] };
-  const currentProjectName = locationState?.projectName || projectId || '项目';
-
+  
   const [selectedChapterId, setSelectedChapterId] = useState<string | null>(null);
   const [selectedChapter, setSelectedChapter] = useState<Chapter | null>(null);
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false); // <--- 对话框状态
 
   useEffect(() => {
-    if (currentDocumentData.chapters.length > 0) {
-      const firstChapterId = currentDocumentData.chapters[0].id;
-      // 只有当selectedChapterId还未设置，或者与当前第一个章节不同时才更新
-      // 避免从对话页返回时，因revisionMode等信息重置了章节选择
-      if (!selectedChapterId || !locationState?.revisionMode) {
-         setSelectedChapterId(firstChapterId);
-      }
-    } else {
-      setSelectedChapterId(null); // 如果没有章节，清空选择
+    if (mockDocumentData.chapters.length > 0 && !selectedChapterId) {
+      const firstChapterId = mockDocumentData.chapters[0].id;
+      setSelectedChapterId(firstChapterId);
     }
-  }, [currentDocumentData, locationState?.revisionMode]); // 依赖于文档数据和是否是修订模式返回
+  }, []); 
 
   useEffect(() => {
     if (selectedChapterId) {
-      const chapter = currentDocumentData.chapters.find(c => c.id === selectedChapterId);
+      const chapter = mockDocumentData.chapters.find(c => c.id === selectedChapterId);
       setSelectedChapter(chapter || null);
-    } else {
-      setSelectedChapter(null); // 如果没有选中ID，清空章节内容
     }
-  }, [selectedChapterId, currentDocumentData]);
+  }, [selectedChapterId]);
 
   const handleChapterSelect = (chapterId: string) => {
     setSelectedChapterId(chapterId);
@@ -112,7 +102,7 @@ const RequirementsReviewPage: React.FC = () => {
 
   const handleCopyDocument = async () => {
     console.log('“复制本文档内容”按钮被点击');
-    const documentText = formatDocumentForCopy(currentDocumentData);
+    const documentText = formatDocumentForCopy(mockDocumentData);
     try {
       await navigator.clipboard.writeText(documentText);
       alert('项目需求规格说明书已复制到剪贴板！');
@@ -131,12 +121,13 @@ const RequirementsReviewPage: React.FC = () => {
     setOpenConfirmDialog(false);
   };
 
-  const handleFinalConfirm = async () => { // 使用从URL获取的projectId
-    if (!projectId) { alert('项目ID未知，无法确认。'); return; }
+  const handleFinalConfirm = async () => {
     setOpenConfirmDialog(false); 
-    console.log(`为项目 ${projectId} 最终确认需求`);
+    console.log('用户选择了“B) 最终确认，可以定稿了？”');
+    const projectId = MOCK_PROJECT_ID_FOR_REVIEW; 
+    console.log(`概念性API调用：POST /api/v1/projects/${projectId}/requirements/confirm`);
     await new Promise(resolve => setTimeout(resolve, 500));
-    alert('需求规格已最终确认！');
+    alert('需求规格已最终确认！准备进入技术规划阶段。');
     // navigate('/'); 
   };
   // ^ ^ ^ ^ ^  确保这些函数在 RequirementsReviewPage 组件内部 ^ ^ ^ ^ ^
@@ -157,12 +148,12 @@ const RequirementsReviewPage: React.FC = () => {
     }
     
     // navigate 函数现在会被使用
-    navigate(`/dialogue/${projectId}`, { 
+    navigate(`/dialogue/${MOCK_PROJECT_ID_FOR_REVIEW}`, { 
       state: { 
         revisionMode: true, 
         chapterToReviseId: selectedChapterId, 
         chapterToReviseTitle: selectedChapter.title, 
-        projectName: currentProjectName,
+        projectName: mockDocumentData.title 
       } 
     });
   };
@@ -185,7 +176,7 @@ const RequirementsReviewPage: React.FC = () => {
         }}
       >
         <Typography variant="h4" component="h1" gutterBottom sx={{ textAlign: 'center', mb: 1 }}>
-          {currentDocumentData.title}
+          {mockDocumentData.title}
         </Typography>
         <Typography variant="subtitle1" sx={{ textAlign: 'center', mb: 3, color: 'text.secondary' }}>
           (审阅草稿)
@@ -210,7 +201,7 @@ const RequirementsReviewPage: React.FC = () => {
             <Paper elevation={0} variant="outlined" sx={{ width: '100%', flexGrow: 1, p: 1.5, overflowY: 'auto' }}>
               <Typography variant="h6" gutterBottom sx={{ ml: 1 }}>目录</Typography>
               <List dense>
-                {currentDocumentData.chapters.map((chapter) => (
+                {mockDocumentData.chapters.map((chapter) => (
                   <ListItem key={chapter.id} disablePadding>
                     <ListItemButton 
                       selected={selectedChapterId === chapter.id}

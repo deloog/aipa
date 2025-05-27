@@ -20,12 +20,12 @@ function App() {
         </nav>
 
         <Routes>
-        <Route path="/login" element={<LoginPage />} />
+          <Route path="/login" element={<LoginPage />} />
           <Route path="/" element={<DashboardPage />} />
           <Route path="/projects/new" element={<NewProjectPage />} />
+          {/* 1. 为DialoguePage添加带projectId参数的路由 */}
           <Route path="/dialogue/:projectId" element={<DialoguePage />} />
-          {/* 修改/添加 RequirementsReviewPage 的路由 */}
-          <Route path="/projects/:projectId/review" element={<RequirementsReviewPage />} />
+          <Route path="/review" element={<RequirementsReviewPage />} />
         </Routes>
       </div>
     </BrowserRouter>

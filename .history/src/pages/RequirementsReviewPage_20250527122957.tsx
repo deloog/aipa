@@ -131,12 +131,13 @@ const RequirementsReviewPage: React.FC = () => {
     setOpenConfirmDialog(false);
   };
 
-  const handleFinalConfirm = async () => { // 使用从URL获取的projectId
-    if (!projectId) { alert('项目ID未知，无法确认。'); return; }
+  const handleFinalConfirm = async () => {
     setOpenConfirmDialog(false); 
-    console.log(`为项目 ${projectId} 最终确认需求`);
+    console.log('用户选择了“B) 最终确认，可以定稿了？”');
+    const projectId = MOCK_PROJECT_ID_FOR_REVIEW; 
+    console.log(`概念性API调用：POST /api/v1/projects/${projectId}/requirements/confirm`);
     await new Promise(resolve => setTimeout(resolve, 500));
-    alert('需求规格已最终确认！');
+    alert('需求规格已最终确认！准备进入技术规划阶段。');
     // navigate('/'); 
   };
   // ^ ^ ^ ^ ^  确保这些函数在 RequirementsReviewPage 组件内部 ^ ^ ^ ^ ^
@@ -185,7 +186,7 @@ const RequirementsReviewPage: React.FC = () => {
         }}
       >
         <Typography variant="h4" component="h1" gutterBottom sx={{ textAlign: 'center', mb: 1 }}>
-          {currentDocumentData.title}
+          {currentProjectName,}
         </Typography>
         <Typography variant="subtitle1" sx={{ textAlign: 'center', mb: 3, color: 'text.secondary' }}>
           (审阅草稿)
@@ -210,7 +211,7 @@ const RequirementsReviewPage: React.FC = () => {
             <Paper elevation={0} variant="outlined" sx={{ width: '100%', flexGrow: 1, p: 1.5, overflowY: 'auto' }}>
               <Typography variant="h6" gutterBottom sx={{ ml: 1 }}>目录</Typography>
               <List dense>
-                {currentDocumentData.chapters.map((chapter) => (
+                {mockDocumentData.chapters.map((chapter) => (
                   <ListItem key={chapter.id} disablePadding>
                     <ListItemButton 
                       selected={selectedChapterId === chapter.id}

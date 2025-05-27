@@ -131,12 +131,13 @@ const RequirementsReviewPage: React.FC = () => {
     setOpenConfirmDialog(false);
   };
 
-  const handleFinalConfirm = async () => { // 使用从URL获取的projectId
-    if (!projectId) { alert('项目ID未知，无法确认。'); return; }
+  const handleFinalConfirm = async () => {
     setOpenConfirmDialog(false); 
-    console.log(`为项目 ${projectId} 最终确认需求`);
+    console.log('用户选择了“B) 最终确认，可以定稿了？”');
+    const projectId = MOCK_PROJECT_ID_FOR_REVIEW; 
+    console.log(`概念性API调用：POST /api/v1/projects/${projectId}/requirements/confirm`);
     await new Promise(resolve => setTimeout(resolve, 500));
-    alert('需求规格已最终确认！');
+    alert('需求规格已最终确认！准备进入技术规划阶段。');
     // navigate('/'); 
   };
   // ^ ^ ^ ^ ^  确保这些函数在 RequirementsReviewPage 组件内部 ^ ^ ^ ^ ^

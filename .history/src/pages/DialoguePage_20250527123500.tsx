@@ -1,6 +1,6 @@
 // src/pages/DialoguePage.tsx
 import React, { useState, useEffect, useRef } from 'react';
-import { useParams, useLocation,useNavigate } from 'react-router-dom'; // 1. 导入 useParams 和 useLocation
+import { useParams, useLocation } from 'react-router-dom'; // 1. 导入 useParams 和 useLocation
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
@@ -31,7 +31,7 @@ const generateMockRequirementsForReview = (projectNameFromState?: string) => ({
 });
 
 const DialoguePage: React.FC = () => {
-  const navigate = useNavigate();
+  const navigate = Navigate();
   const [messages, setMessages] = useState<DialogueMessage[]>([]);
   const [currentUserInput, setCurrentUserInput] = useState<string>('');
   const [isSending, setIsSending] = useState<boolean>(false);
