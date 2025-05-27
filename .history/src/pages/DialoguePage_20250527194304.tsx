@@ -138,7 +138,7 @@ const DialoguePage: React.FC = () => {
 
     navigate(`/projects/${projectId}/review`, {
       state: {
-        documentData: mockGeneratedDocAndPlan, // 传递模拟生成的需求文档数据
+        documentData: mockGeneratedDoc, // 传递模拟生成的需求文档数据
         projectName: pageProjectName,
       }
     });

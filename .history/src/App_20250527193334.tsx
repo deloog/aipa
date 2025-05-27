@@ -24,8 +24,8 @@ function App() {
           <Route path="/" element={<DashboardPage />} />
           <Route path="/projects/new" element={<NewProjectPage />} />
           <Route path="/dialogue/:projectId" element={<DialoguePage />} />
-          {/* 修改/添加 PlanningDocumentViewerPage 的路由 */}
-          <Route path="/projects/:projectId/review" element={<PlanningDocumentViewerPage />} />
+          {/* 修改/添加 RequirementsReviewPage 的路由 */}
+          <Route path="/projects/:projectId/review" element={<RequirementsReviewPage />} />
         </Routes>
       </div>
     </BrowserRouter>

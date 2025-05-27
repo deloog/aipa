@@ -133,7 +133,7 @@ const DialoguePage: React.FC = () => {
       alert('错误：项目ID未知，无法进入审阅。');
       return;
     }
-    console.log(`对话完成，准备为项目 ${projectId} 生成需求文档并导航到审阅页...`);
+    
     const mockGeneratedDocAndPlan = generateMockRequirementsForReview(pageProjectName); 
 
     navigate(`/projects/${projectId}/review`, {

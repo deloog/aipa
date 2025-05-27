@@ -134,11 +134,11 @@ const DialoguePage: React.FC = () => {
       return;
     }
     console.log(`对话完成，准备为项目 ${projectId} 生成需求文档并导航到审阅页...`);
-    const mockGeneratedDocAndPlan = generateMockRequirementsForReview(pageProjectName); 
+    const mockGeneratedDoc = generateMockRequirementsForReview(pageProjectName);
 
     navigate(`/projects/${projectId}/review`, {
       state: {
-        documentData: mockGeneratedDocAndPlan, // 传递模拟生成的需求文档数据
+        documentData: mockGeneratedDoc, // 传递模拟生成的需求文档数据
         projectName: pageProjectName,
       }
     });

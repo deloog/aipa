@@ -5,7 +5,7 @@ import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
 import NewProjectPage from './pages/NewProjectPage';
 import DialoguePage from './pages/DialoguePage';
-import PlanningDocumentViewerPage from './pages/PlanningDocumentViewerPage';
+import RequirementsReviewPage from './pages/PlanningDocumentViewerPage';
 
 function App() {
   return (
@@ -24,8 +24,8 @@ function App() {
           <Route path="/" element={<DashboardPage />} />
           <Route path="/projects/new" element={<NewProjectPage />} />
           <Route path="/dialogue/:projectId" element={<DialoguePage />} />
-          {/* 修改/添加 PlanningDocumentViewerPage 的路由 */}
-          <Route path="/projects/:projectId/review" element={<PlanningDocumentViewerPage />} />
+          {/* 修改/添加 RequirementsReviewPage 的路由 */}
+          <Route path="/projects/:projectId/review" element={<RequirementsReviewPage />} />
         </Routes>
       </div>
     </BrowserRouter>
