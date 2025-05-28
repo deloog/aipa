@@ -148,16 +148,16 @@ const PlanningDocumentViewerPage: React.FC = () => {
   return (
     <Box
       sx={{
-        minHeight: '100vh', display: 'flex', flexDirection: 'stretch', alignItems: 'center',
+        minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center',
         background: 'linear-gradient(to right bottom, #3A4A5E, #1C2833)',
-        padding: 0,
+        padding: { xs: 1, sm: 2, md: 3 },
       }}
     >
       <Paper 
         elevation={3} 
         sx={{ 
           padding: { xs: 1, sm: 2, md: 3 }, borderRadius: '8px', bgcolor: 'background.paper',
-          width: '100%',  display: 'flex', flexDirection: 'column', minHeight: '85vh',
+          width: '100%', maxWidth: '1200px', display: 'flex', flexDirection: 'column', minHeight: '85vh',
         }}
       >
         <Typography variant="h4" component="h1" gutterBottom sx={{ textAlign: 'center', mb: 1 }}>

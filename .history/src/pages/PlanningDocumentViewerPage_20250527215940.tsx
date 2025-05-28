@@ -150,7 +150,7 @@ const PlanningDocumentViewerPage: React.FC = () => {
       sx={{
         minHeight: '100vh', display: 'flex', flexDirection: 'stretch', alignItems: 'center',
         background: 'linear-gradient(to right bottom, #3A4A5E, #1C2833)',
-        padding: 0,
+        padding: { xs: 1, sm: 2, md: 3 },
       }}
     >
       <Paper 
