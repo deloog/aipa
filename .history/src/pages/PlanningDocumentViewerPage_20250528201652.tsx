@@ -20,7 +20,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import type { AtomizedInstruction } from '../components/instructions/types'; 
 import InstructionsViewer from '../components/instructions/InstructionsViewer'; 
 
-
+//以下一行代码调试结束后删除
+console.log('[DEBUG] 页面已重新加载');
 
 
 interface Chapter {
@@ -331,6 +332,23 @@ const PlanningDocumentViewerPage: React.FC = () => {
           <Button variant="contained" color="primary" onClick={handleClickOpenConfirmDialog}>
             最终确认此需求规格
           </Button>
+          <Button
+    variant="outlined"
+    color="secondary"
+    onClick={() => {
+      setCurrentTaskInstructions([
+        { 
+          stepNumber: 999, 
+          purpose: '测试指令', 
+          command: 'echo "这是一条测试指令"', 
+          expectedOutcome: '应该显示这条指令' 
+        }
+      ]);
+      setIsInstructionsDialogOpen(true);
+    }}
+  >
+    测试打开指令对话框
+    </Button>
           <Button
             variant="outlined"
             color="info" // 使用不同颜色区分

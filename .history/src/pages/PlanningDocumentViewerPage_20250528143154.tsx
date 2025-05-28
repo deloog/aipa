@@ -17,11 +17,8 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import type { AtomizedInstruction } from '../components/instructions/types'; 
-import InstructionsViewer from '../components/instructions/InstructionsViewer'; 
-
-
-
+import type { AtomizedInstruction } from '../../components/instructions/types'; // 1. 确保或添加此导入
+import InstructionsViewer from '../../components/instructions/InstructionsViewer'; // 2. 导入 InstructionsViewer
 
 interface Chapter {
   id: string;
@@ -66,39 +63,23 @@ const PlanningDocumentViewerPage: React.FC = () => {
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
   const [selectedTaskForInstructions, setSelectedTaskForInstructions] = useState<string | null>(null);
   const [currentTaskInstructions, setCurrentTaskInstructions] = useState<AtomizedInstruction[] | null>(null);
-  const [isInstructionsDialogOpen, setIsInstructionsDialogOpen] = useState(false);
 
   useEffect(() => {
-    console.log('[Effect 1 DEBUG] Running. locationState:', locationState, 'currentDoc chapters:', currentDocumentData?.requirementsSpec?.chapters, currentDocumentData?.technicalPlan?.chapters);
-  
-    let chapterIdToSet: string | null = null;
-  
-    if (locationState?.revisionMode && locationState?.chapterToReviseId) {
-      // 如果是从修订模式返回，并且明确指定了要修订的章节ID
-      chapterIdToSet = locationState.chapterToReviseId;
-      console.log('[Effect 1 DEBUG] Revision mode, setting chapter to:', chapterIdToSet);
-    } else if (!selectedChapterId) { 
-      // 仅当 selectedChapterId 当前为 null (例如首次加载) 时，才设置默认的第一章
-      if (currentDocumentData.requirementsSpec && currentDocumentData.requirementsSpec.chapters.length > 0) {
-        chapterIdToSet = currentDocumentData.requirementsSpec.chapters[0].id;
-        console.log('[Effect 1 DEBUG] Initial load, defaulting to first requirements chapter:', chapterIdToSet);
-      } else if (currentDocumentData.technicalPlan && currentDocumentData.technicalPlan.chapters.length > 0) {
-        chapterIdToSet = currentDocumentData.technicalPlan.chapters[0].id;
-        console.log('[Effect 1 DEBUG] Initial load, defaulting to first technical plan chapter:', chapterIdToSet);
-      }
+    let firstChapter: Chapter | undefined = undefined;
+    if (currentDocumentData.requirementsSpec && currentDocumentData.requirementsSpec.chapters.length > 0) {
+      firstChapter = currentDocumentData.requirementsSpec.chapters[0];
+    } else if (currentDocumentData.technicalPlan && currentDocumentData.technicalPlan.chapters.length > 0) {
+      firstChapter = currentDocumentData.technicalPlan.chapters[0];
     }
-  
-    // 只有当计算出的 chapterIdToSet 有意义且与当前 selectedChapterId 不同时才更新
-    if (chapterIdToSet !== null && selectedChapterId !== chapterIdToSet) {
-      console.log('[Effect 1 DEBUG] Updating selectedChapterId from', selectedChapterId, 'to:', chapterIdToSet);
-      setSelectedChapterId(chapterIdToSet);
-    } else if (chapterIdToSet === null && selectedChapterId !== null) {
-      // 如果没有章节可以被选中 (例如文档为空)，则清空 selectedChapterId
-      console.log('[Effect 1 DEBUG] No chapter to select, clearing selectedChapterId.');
+
+    if (firstChapter && (!selectedChapterId || !locationState?.revisionMode)) {
+       setSelectedChapterId(firstChapter.id);
+    } else if (!firstChapter && !locationState?.revisionMode) { // 如果没有章节且不是修订模式返回
       setSelectedChapterId(null);
     }
-  // 依赖项修正：移除了 selectedChapterId，现在只依赖外部传入的数据和导航状态
-  }, [currentDocumentData, locationState]);  
+    // 如果是修订模式返回，并且有chapterToReviseId，我们应该选中它
+    // 这个逻辑可以在另一个useEffect或这里扩展，但为了保持当前步骤清晰，暂时简化
+  }, [currentDocumentData, locationState?.revisionMode, selectedChapterId]); 
 
   useEffect(() => {
     if (selectedChapterId) {
@@ -160,7 +141,6 @@ const PlanningDocumentViewerPage: React.FC = () => {
     alert('需求规格已最终确认！');
   };
   const handleViewInstructions = (taskId: string, taskTitle: string) => {
-    
     console.log(`查看任务 "${taskTitle}" (ID: ${taskId}) 的指令`);
     setSelectedTaskForInstructions(taskId);
     let mockInstructionsForTask: AtomizedInstruction[] = [];
@@ -182,13 +162,6 @@ const PlanningDocumentViewerPage: React.FC = () => {
      ];
   }
   setCurrentTaskInstructions(mockInstructionsForTask);
-  setIsInstructionsDialogOpen(true); 
-};
-  const handleCloseInstructionsDialog = () => {
-    setIsInstructionsDialogOpen(false);
-  // （可选）关闭对话框时，清空当前查看的任务和指令，以便下次打开是干净的
-    setSelectedTaskForInstructions(null);
-    setCurrentTaskInstructions(null);
 };
   const allDisplayableParts: DocumentPart[] = [];
   if (currentDocumentData.requirementsSpec && currentDocumentData.requirementsSpec.chapters.length > 0) {
@@ -229,7 +202,7 @@ const PlanningDocumentViewerPage: React.FC = () => {
                     <ListItem><ListItemText primary="暂无章节可供审阅" /></ListItem>
                 )}
                 {allDisplayableParts.map((part, partIndex) => (
-                  <React.Fragment key={`part-${part.title.replace(/\s+/g, '_')}-${partIndex}`}>
+                  <React.Fragment key={`part-<span class="math-inline">\{part\.title\}\-</span>{partIndex}`}>
                     {part.title && (
                       <ListSubheader component="div" sx={{ bgcolor: 'grey.100', lineHeight: '32px', mt: partIndex > 0 ? 1 : 0 }}>
                         {part.title}
@@ -258,50 +231,9 @@ const PlanningDocumentViewerPage: React.FC = () => {
                 <>
                   <Typography variant="h5" component="h2" gutterBottom>{selectedChapter.title}</Typography>
                   <Divider sx={{ mb: 2 }} />
-                  {selectedChapter.id === 'tech_dev_steps' ? (
-                    (() => { // 使用立即执行函数表达式 (IIFE) 以便在JSX中进行多步逻辑处理
-                      try {
-                        const devStepsData = JSON.parse(selectedChapter.content);
-                        return (
-                          <Box>
-                            {devStepsData.introduction && <Typography paragraph>{devStepsData.introduction}</Typography>}
-                            {devStepsData.tasks && Array.isArray(devStepsData.tasks) && (
-                              <List dense>
-                                {devStepsData.tasks.map((task: { taskId: string; title: string; description: string; }, index: number) => (
-                                  <ListItem key={task.taskId || index} divider>
-                                    <Box sx={{ width: '100%'}}>
-                                      <Typography variant="subtitle1" component="div" gutterBottom sx={{fontWeight: 'bold'}}>
-                                        {task.title || `未命名任务 ${index + 1}`}
-                                      </Typography>
-                                      {task.description && <Typography variant="body2" color="text.secondary" paragraph>{task.description}</Typography>}
-                                      <Button 
-                                        size="small" 
-                                        variant="contained" 
-                                        onClick={() => handleViewInstructions(task.taskId, task.title)}
-                                        sx={{ mt: 1 }}
-                                      >
-                                        查看/执行指令
-                                      </Button>
-                                    </Box>
-                                  </ListItem>
-                                ))}
-                              </List>
-                            )}
-                            {/* 6. 在这里显示选定任务的指令 */}
-                            
-                          </Box>
-                        );
-                      } catch (e) {
-                        console.error("无法解析开发步骤内容:", e);
-                        return <Typography color="error">开发步骤内容格式错误。</Typography>;
-                      }
-                    })() //立即执行
-                  ) : (
-                    // 对于其他普通章节，正常显示其content
-                    <Typography variant="body1" paragraph sx={{ whiteSpace: 'pre-line' }}>
-                      {selectedChapter.content}
-                    </Typography>
-                  )}
+                  <Typography variant="body1" paragraph sx={{ whiteSpace: 'pre-line' }}>
+                    {selectedChapter.content}
+                  </Typography>
                 </>
               ) : (
                 <Typography variant="body1" color="textSecondary" sx={{ textAlign: 'center', mt: 4 }}>
@@ -319,7 +251,6 @@ const PlanningDocumentViewerPage: React.FC = () => {
             justifyContent: 'flex-end',
             gap: 2, 
             paddingTop: 2, 
-                    
           }}
         >
           <Button variant="outlined" onClick={handleCopyDocument}>
@@ -382,33 +313,6 @@ const PlanningDocumentViewerPage: React.FC = () => {
           </Button>
         </DialogActions>
       </Dialog>
-      <Dialog
-          open={isInstructionsDialogOpen}
-          onClose={handleCloseInstructionsDialog}
-          fullWidth // 使对话框占据可用宽度的较大部分
-          maxWidth="md" // 设置对话框的最大宽度 (可以是 'xs', 'sm', 'md', 'lg', 'xl')
-          aria-labelledby="instructions-dialog-title"
-        >
-          <DialogTitle id="instructions-dialog-title">
-            任务 "{selectedTaskForInstructions || '未知任务'}" 的原子化开发指令
-          </DialogTitle>
-          <DialogContent dividers> {/* dividers 会在内容区上下添加分割线 */}
-                    
-            {currentTaskInstructions && selectedTaskForInstructions ? (
-              <InstructionsViewer
-                instructions={currentTaskInstructions}
-                taskId={selectedTaskForInstructions}
-              />
-            ) : (
-              <Typography>暂无指令可显示。</Typography>
-            )}
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleCloseInstructionsDialog} color="primary">
-              关闭
-            </Button>
-          </DialogActions>
-        </Dialog>
     </Box>
   );
 };

@@ -38,26 +38,23 @@ const generateMockRequirementsForReview = (projectNameFromState?: string) => ({
       { 
         id: 'tech_stack', 
         title: '2.1. 推荐技术栈', 
-        content: '推荐技术栈：\n- 前端: React (TypeScript) + MUI\n- 后端: NestJS (TypeScript) + PostgreSQL\n理由: ... (此处应为更详细的技术栈说明)' 
+        content: '推荐技术栈：\n- 前端: React (TypeScript) + MUI\n- 后端: NestJS (TypeScript) + PostgreSQL\n理由: ... (此处应为更详细的技术栈说明)' ,
       },
       { 
         id: 'tech_architecture', 
         title: '2.2. 系统架构设计初步', 
-        content: '系统架构：\n- 采用微服务架构...\n- 核心模块包括用户认证、项目管理、AI编排...\n(此处应为更详细的架构说明)' 
+        content: '系统架构：\n- 采用微服务架构...\n- 核心模块包括用户认证、项目管理、AI编排...\n(此处应为更详细的架构说明)'
       },
-      {
         id: 'tech_dev_steps',
         title: '2.6. 开发实施步骤与优先级建议 (示例)', // 您的AIPA文档中是2.6，我们就用这个编号
-        // 我们将content设计为一个特殊的对象，包含任务列表
+          // 我们将content设计为一个特殊的对象，包含任务列表
         content: JSON.stringify({ // 将对象字符串化以便传递，接收方再解析
-          introduction: '以下是建议的初步开发实施步骤：',
-          tasks: [
-            { taskId: 'task_init_backend', title: '阶段0 - 任务1.1: 后端项目初始化', description: '初始化NestJS后端项目, 集成Prisma, 定义初始数据模型。' },
-            { taskId: 'task_auth_api', title: '阶段0 - 任务1.2: 核心用户认证API骨架', description: '搭建用户认证模块、JWT策略、第三方登录回调骨架。' },
-            { taskId: 'task_frontend_init', title: '阶段1 - 任务1.3: 前端项目初始化', description: '初始化React (Vite) + TypeScript前端项目。' },
-          ]
-        }) // 确保这个content能被正确解析和渲染
-      },
+            introduction: '以下是建议的初步开发实施步骤：',
+            tasks: [
+              { taskId: 'task_init_backend', title: '阶段0 - 任务1.1: 后端项目初始化', description: '初始化NestJS后端项目, 集成Prisma, 定义初始数据模型。' },
+              { taskId: 'task_auth_api', title: '阶段0 - 任务1.2: 核心用户认证API骨架', description: '搭建用户认证模块、JWT策略、第三方登录回调骨架。' },
+              { taskId: 'task_frontend_init', title: '阶段1 - 任务1.3: 前端项目初始化', description: '初始化React (Vite) + TypeScript前端项目。' },
+            ]
       // ... 更多技术规划章节
     ],
   }

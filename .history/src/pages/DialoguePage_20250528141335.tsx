@@ -1,6 +1,6 @@
 // src/pages/DialoguePage.tsx
 import React, { useState, useEffect, useRef } from 'react';
-import { useParams, useLocation,useNavigate } from 'react-router-dom'; // 1. 导入 useParams 和 useLocation
+import { useParams, useLocation, useNavigate } from 'react-router-dom'; // 1. 导入 useParams 和 useLocation
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
@@ -35,15 +35,15 @@ const generateMockRequirementsForReview = (projectNameFromState?: string) => ({
   technicalPlan: { // 第二部分：技术规划 (新增)
     title: '第二部分：项目技术规划方案',
     chapters: [
-      { 
-        id: 'tech_stack', 
-        title: '2.1. 推荐技术栈', 
-        content: '推荐技术栈：\n- 前端: React (TypeScript) + MUI\n- 后端: NestJS (TypeScript) + PostgreSQL\n理由: ... (此处应为更详细的技术栈说明)' 
+      {
+        id: 'tech_stack',
+        title: '2.1. 推荐技术栈',
+        content: '推荐技术栈：\n- 前端: React (TypeScript) + MUI\n- 后端: NestJS (TypeScript) + PostgreSQL\n理由: ... (此处应为更详细的技术栈说明)'
       },
-      { 
-        id: 'tech_architecture', 
-        title: '2.2. 系统架构设计初步', 
-        content: '系统架构：\n- 采用微服务架构...\n- 核心模块包括用户认证、项目管理、AI编排...\n(此处应为更详细的架构说明)' 
+      {
+        id: 'tech_architecture',
+        title: '2.2. 系统架构设计初步',
+        content: '系统架构：\n- 采用微服务架构...\n- 核心模块包括用户认证、项目管理、AI编排...\n(此处应为更详细的架构说明)'
       },
       {
         id: 'tech_dev_steps',
@@ -55,13 +55,9 @@ const generateMockRequirementsForReview = (projectNameFromState?: string) => ({
             { taskId: 'task_init_backend', title: '阶段0 - 任务1.1: 后端项目初始化', description: '初始化NestJS后端项目, 集成Prisma, 定义初始数据模型。' },
             { taskId: 'task_auth_api', title: '阶段0 - 任务1.2: 核心用户认证API骨架', description: '搭建用户认证模块、JWT策略、第三方登录回调骨架。' },
             { taskId: 'task_frontend_init', title: '阶段1 - 任务1.3: 前端项目初始化', description: '初始化React (Vite) + TypeScript前端项目。' },
-          ]
-        }) // 确保这个content能被正确解析和渲染
+          ],
+        }) ,// 确保这个content能被正确解析和渲染
       },
-      // ... 更多技术规划章节
-    ],
-  }
-});
 
 const DialoguePage: React.FC = () => {
   const navigate = useNavigate();
@@ -70,7 +66,7 @@ const DialoguePage: React.FC = () => {
   const [isSending, setIsSending] = useState<boolean>(false);
 
   // 2. 从URL参数中获取projectId
-  const { projectId } = useParams<{ projectId: string }>(); 
+  const { projectId } = useParams<{ projectId: string }>();
   // 3. 从路由状态中获取传递过来的数据
   const location = useLocation();
   console.log('在DialoguePage中接收到的路由state:', location.state);
@@ -147,7 +143,7 @@ const DialoguePage: React.FC = () => {
       return;
     }
     console.log(`对话完成，准备为项目 ${projectId} 生成需求文档并导航到审阅页...`);
-    const mockGeneratedDocAndPlan = generateMockRequirementsForReview(pageProjectName); 
+    const mockGeneratedDocAndPlan = generateMockRequirementsForReview(pageProjectName);
 
     navigate(`/projects/${projectId}/review`, {
       state: {
@@ -170,8 +166,8 @@ const DialoguePage: React.FC = () => {
           与AIPA对话 ({pageProjectName || '新项目'})
         </Typography>
 
-        <Paper 
-          elevation={3} 
+        <Paper
+          elevation={3}
           sx={{ /* ... Paper样式 ... */
             display: 'flex', flexDirection: 'column', flexGrow: 1, width: '100%',
             bgcolor: 'background.paper', borderRadius: '8px', overflow: 'hidden',
@@ -183,7 +179,7 @@ const DialoguePage: React.FC = () => {
             }}
           >
             {messages.length === 0 && !initialAiMessage && ( // 只有在完全没有消息时显示占位符
-              <Typography variant="body2" color="textSecondary" sx={{textAlign: 'center', mt: 2}}>
+              <Typography variant="body2" color="textSecondary" sx={{ textAlign: 'center', mt: 2 }}>
                 对话历史将显示在此处...
               </Typography>
             )}
@@ -211,7 +207,7 @@ const DialoguePage: React.FC = () => {
                 </Paper>
               </Box>
             ))}
-            <div ref={messagesEndRef} /> 
+            <div ref={messagesEndRef} />
           </Box>
 
           <Box
@@ -225,7 +221,7 @@ const DialoguePage: React.FC = () => {
             <TextField
               fullWidth variant="outlined" size="small" placeholder="在此输入您的回复..."
               value={currentUserInput} onChange={handleInputChange}
-              onKeyPress={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSendMessage(); }}}
+              onKeyPress={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSendMessage(); } }}
               sx={{ mr: 1.5 }} multiline maxRows={4} disabled={isSending || !projectId} // 如果没有projectId也禁用
             />
             <Button
@@ -237,9 +233,9 @@ const DialoguePage: React.FC = () => {
           </Box>
         </Paper>
         <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
-          <Button 
-            variant="contained" 
-            color="secondary" 
+          <Button
+            variant="contained"
+            color="secondary"
             onClick={handleCompleteDialogueAndReview}
             disabled={!projectId || messages.length < 2} // 简单示例：至少有一轮用户和AI的对话
           >

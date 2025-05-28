@@ -20,9 +20,6 @@ import DialogTitle from '@mui/material/DialogTitle';
 import type { AtomizedInstruction } from '../components/instructions/types'; 
 import InstructionsViewer from '../components/instructions/InstructionsViewer'; 
 
-
-
-
 interface Chapter {
   id: string;
   title: string;
@@ -160,7 +157,6 @@ const PlanningDocumentViewerPage: React.FC = () => {
     alert('需求规格已最终确认！');
   };
   const handleViewInstructions = (taskId: string, taskTitle: string) => {
-    
     console.log(`查看任务 "${taskTitle}" (ID: ${taskId}) 的指令`);
     setSelectedTaskForInstructions(taskId);
     let mockInstructionsForTask: AtomizedInstruction[] = [];
@@ -288,7 +284,7 @@ const PlanningDocumentViewerPage: React.FC = () => {
                               </List>
                             )}
                             {/* 6. 在这里显示选定任务的指令 */}
-                            
+                            {selectedTaskForInstructions && currentTaskInstructions }
                           </Box>
                         );
                       } catch (e) {
@@ -319,7 +315,6 @@ const PlanningDocumentViewerPage: React.FC = () => {
             justifyContent: 'flex-end',
             gap: 2, 
             paddingTop: 2, 
-                    
           }}
         >
           <Button variant="outlined" onClick={handleCopyDocument}>
@@ -393,7 +388,6 @@ const PlanningDocumentViewerPage: React.FC = () => {
             任务 "{selectedTaskForInstructions || '未知任务'}" 的原子化开发指令
           </DialogTitle>
           <DialogContent dividers> {/* dividers 会在内容区上下添加分割线 */}
-                    
             {currentTaskInstructions && selectedTaskForInstructions ? (
               <InstructionsViewer
                 instructions={currentTaskInstructions}

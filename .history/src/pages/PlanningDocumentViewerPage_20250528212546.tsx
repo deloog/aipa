@@ -22,7 +22,6 @@ import InstructionsViewer from '../components/instructions/InstructionsViewer';
 
 
 
-
 interface Chapter {
   id: string;
   title: string;
@@ -392,7 +391,7 @@ const PlanningDocumentViewerPage: React.FC = () => {
           <DialogTitle id="instructions-dialog-title">
             任务 "{selectedTaskForInstructions || '未知任务'}" 的原子化开发指令
           </DialogTitle>
-          <DialogContent dividers> {/* dividers 会在内容区上下添加分割线 */}
+          <DialogContent > {/* dividers 会在内容区上下添加分割线 */}
                     
             {currentTaskInstructions && selectedTaskForInstructions ? (
               <InstructionsViewer

@@ -20,9 +20,6 @@ import DialogTitle from '@mui/material/DialogTitle';
 import type { AtomizedInstruction } from '../components/instructions/types'; 
 import InstructionsViewer from '../components/instructions/InstructionsViewer'; 
 
-
-
-
 interface Chapter {
   id: string;
   title: string;
@@ -66,7 +63,6 @@ const PlanningDocumentViewerPage: React.FC = () => {
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
   const [selectedTaskForInstructions, setSelectedTaskForInstructions] = useState<string | null>(null);
   const [currentTaskInstructions, setCurrentTaskInstructions] = useState<AtomizedInstruction[] | null>(null);
-  const [isInstructionsDialogOpen, setIsInstructionsDialogOpen] = useState(false);
 
   useEffect(() => {
     console.log('[Effect 1 DEBUG] Running. locationState:', locationState, 'currentDoc chapters:', currentDocumentData?.requirementsSpec?.chapters, currentDocumentData?.technicalPlan?.chapters);
@@ -160,7 +156,6 @@ const PlanningDocumentViewerPage: React.FC = () => {
     alert('需求规格已最终确认！');
   };
   const handleViewInstructions = (taskId: string, taskTitle: string) => {
-    
     console.log(`查看任务 "${taskTitle}" (ID: ${taskId}) 的指令`);
     setSelectedTaskForInstructions(taskId);
     let mockInstructionsForTask: AtomizedInstruction[] = [];
@@ -182,13 +177,6 @@ const PlanningDocumentViewerPage: React.FC = () => {
      ];
   }
   setCurrentTaskInstructions(mockInstructionsForTask);
-  setIsInstructionsDialogOpen(true); 
-};
-  const handleCloseInstructionsDialog = () => {
-    setIsInstructionsDialogOpen(false);
-  // （可选）关闭对话框时，清空当前查看的任务和指令，以便下次打开是干净的
-    setSelectedTaskForInstructions(null);
-    setCurrentTaskInstructions(null);
 };
   const allDisplayableParts: DocumentPart[] = [];
   if (currentDocumentData.requirementsSpec && currentDocumentData.requirementsSpec.chapters.length > 0) {
@@ -229,7 +217,7 @@ const PlanningDocumentViewerPage: React.FC = () => {
                     <ListItem><ListItemText primary="暂无章节可供审阅" /></ListItem>
                 )}
                 {allDisplayableParts.map((part, partIndex) => (
-                  <React.Fragment key={`part-${part.title.replace(/\s+/g, '_')}-${partIndex}`}>
+                  <React.Fragment key={`part-<span class="math-inline">\{part\.title\}\-</span>{partIndex}`}>
                     {part.title && (
                       <ListSubheader component="div" sx={{ bgcolor: 'grey.100', lineHeight: '32px', mt: partIndex > 0 ? 1 : 0 }}>
                         {part.title}
@@ -288,7 +276,21 @@ const PlanningDocumentViewerPage: React.FC = () => {
                               </List>
                             )}
                             {/* 6. 在这里显示选定任务的指令 */}
-                            
+                            {selectedTaskForInstructions && currentTaskInstructions && (
+                              <Box sx={{ mt: 3, p: 2, border: '1px dashed', borderColor: 'divider', borderRadius: '4px' }}>
+                                <InstructionsViewer 
+                                  instructions={currentTaskInstructions} 
+                                  taskId={selectedTaskForInstructions} 
+                                />
+                                <Button 
+                                  size="small" 
+                                  onClick={() => { setSelectedTaskForInstructions(null); setCurrentTaskInstructions(null); }} 
+                                  sx={{ mt: 1 }}
+                                >
+                                  关闭指令视图
+                                </Button>
+                              </Box>
+                            )}
                           </Box>
                         );
                       } catch (e) {
@@ -319,7 +321,6 @@ const PlanningDocumentViewerPage: React.FC = () => {
             justifyContent: 'flex-end',
             gap: 2, 
             paddingTop: 2, 
-                    
           }}
         >
           <Button variant="outlined" onClick={handleCopyDocument}>
@@ -382,33 +383,6 @@ const PlanningDocumentViewerPage: React.FC = () => {
           </Button>
         </DialogActions>
       </Dialog>
-      <Dialog
-          open={isInstructionsDialogOpen}
-          onClose={handleCloseInstructionsDialog}
-          fullWidth // 使对话框占据可用宽度的较大部分
-          maxWidth="md" // 设置对话框的最大宽度 (可以是 'xs', 'sm', 'md', 'lg', 'xl')
-          aria-labelledby="instructions-dialog-title"
-        >
-          <DialogTitle id="instructions-dialog-title">
-            任务 "{selectedTaskForInstructions || '未知任务'}" 的原子化开发指令
-          </DialogTitle>
-          <DialogContent dividers> {/* dividers 会在内容区上下添加分割线 */}
-                    
-            {currentTaskInstructions && selectedTaskForInstructions ? (
-              <InstructionsViewer
-                instructions={currentTaskInstructions}
-                taskId={selectedTaskForInstructions}
-              />
-            ) : (
-              <Typography>暂无指令可显示。</Typography>
-            )}
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleCloseInstructionsDialog} color="primary">
-              关闭
-            </Button>
-          </DialogActions>
-        </Dialog>
     </Box>
   );
 };

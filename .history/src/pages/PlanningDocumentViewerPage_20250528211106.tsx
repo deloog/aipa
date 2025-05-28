@@ -22,7 +22,6 @@ import InstructionsViewer from '../components/instructions/InstructionsViewer';
 
 
 
-
 interface Chapter {
   id: string;
   title: string;

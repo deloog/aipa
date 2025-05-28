@@ -394,7 +394,7 @@ const PlanningDocumentViewerPage: React.FC = () => {
           </DialogTitle>
           <DialogContent dividers> {/* dividers 会在内容区上下添加分割线 */}
                     
-            {currentTaskInstructions && selectedTaskForInstructions ? (
+             (
               <InstructionsViewer
                 instructions={currentTaskInstructions}
                 taskId={selectedTaskForInstructions}

@@ -20,7 +20,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import type { AtomizedInstruction } from '../components/instructions/types'; 
 import InstructionsViewer from '../components/instructions/InstructionsViewer'; 
 
-
+//以下一行代码调试结束后删除
+console.log('[DEBUG] 页面已重新加载');
 
 
 interface Chapter {
@@ -160,7 +161,7 @@ const PlanningDocumentViewerPage: React.FC = () => {
     alert('需求规格已最终确认！');
   };
   const handleViewInstructions = (taskId: string, taskTitle: string) => {
-    
+    console.log('[DEBUG] 点击了查看指令按钮', taskId, taskTitle); // 新增这行调试用的
     console.log(`查看任务 "${taskTitle}" (ID: ${taskId}) 的指令`);
     setSelectedTaskForInstructions(taskId);
     let mockInstructionsForTask: AtomizedInstruction[] = [];
@@ -288,7 +289,7 @@ const PlanningDocumentViewerPage: React.FC = () => {
                               </List>
                             )}
                             {/* 6. 在这里显示选定任务的指令 */}
-                            
+                            {selectedTaskForInstructions && currentTaskInstructions }
                           </Box>
                         );
                       } catch (e) {
@@ -319,7 +320,8 @@ const PlanningDocumentViewerPage: React.FC = () => {
             justifyContent: 'flex-end',
             gap: 2, 
             paddingTop: 2, 
-                    
+            //下面这行样式为调试用
+            '& > button': { ml: 1 }             
           }}
         >
           <Button variant="outlined" onClick={handleCopyDocument}>
@@ -331,6 +333,23 @@ const PlanningDocumentViewerPage: React.FC = () => {
           <Button variant="contained" color="primary" onClick={handleClickOpenConfirmDialog}>
             最终确认此需求规格
           </Button>
+          <Button
+    variant="outlined"
+    color="secondary"
+    onClick={() => {
+      setCurrentTaskInstructions([
+        { 
+          stepNumber: 999, 
+          purpose: '测试指令', 
+          command: 'echo "这是一条测试指令"', 
+          expectedOutcome: '应该显示这条指令' 
+        }
+      ]);
+      setIsInstructionsDialogOpen(true);
+    }}
+  >
+    测试打开指令对话框
+    </Button>
           <Button
             variant="outlined"
             color="info" // 使用不同颜色区分
@@ -393,7 +412,8 @@ const PlanningDocumentViewerPage: React.FC = () => {
             任务 "{selectedTaskForInstructions || '未知任务'}" 的原子化开发指令
           </DialogTitle>
           <DialogContent dividers> {/* dividers 会在内容区上下添加分割线 */}
-                    
+            
+  
             {currentTaskInstructions && selectedTaskForInstructions ? (
               <InstructionsViewer
                 instructions={currentTaskInstructions}

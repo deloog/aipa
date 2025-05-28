@@ -20,7 +20,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import type { AtomizedInstruction } from '../components/instructions/types'; 
 import InstructionsViewer from '../components/instructions/InstructionsViewer'; 
 
-
+//以下一行代码调试结束后删除
+console.log('[DEBUG] 页面已重新加载');
 
 
 interface Chapter {
@@ -160,7 +161,7 @@ const PlanningDocumentViewerPage: React.FC = () => {
     alert('需求规格已最终确认！');
   };
   const handleViewInstructions = (taskId: string, taskTitle: string) => {
-    
+    console.log('[DEBUG] 点击了查看指令按钮', taskId, taskTitle); // 新增这行调试用的
     console.log(`查看任务 "${taskTitle}" (ID: ${taskId}) 的指令`);
     setSelectedTaskForInstructions(taskId);
     let mockInstructionsForTask: AtomizedInstruction[] = [];
@@ -288,7 +289,7 @@ const PlanningDocumentViewerPage: React.FC = () => {
                               </List>
                             )}
                             {/* 6. 在这里显示选定任务的指令 */}
-                            
+                            {selectedTaskForInstructions && currentTaskInstructions }
                           </Box>
                         );
                       } catch (e) {
@@ -319,7 +320,7 @@ const PlanningDocumentViewerPage: React.FC = () => {
             justifyContent: 'flex-end',
             gap: 2, 
             paddingTop: 2, 
-                    
+            //下面这行样式为 
           }}
         >
           <Button variant="outlined" onClick={handleCopyDocument}>
@@ -393,7 +394,18 @@ const PlanningDocumentViewerPage: React.FC = () => {
             任务 "{selectedTaskForInstructions || '未知任务'}" 的原子化开发指令
           </DialogTitle>
           <DialogContent dividers> {/* dividers 会在内容区上下添加分割线 */}
-                    
+            {/* 添加这4行调试代码 */}
+            <pre style={{ 
+            background: '#f0f0f0', 
+            padding: 10, 
+            borderRadius: 4,
+            maxHeight: 300,
+            overflowY: 'auto'
+          }}> 
+           // 调试代码结束
+    {JSON.stringify(currentTaskInstructions, null, 2)}
+  </pre>
+  {/* 原有代码保持不变 */}
             {currentTaskInstructions && selectedTaskForInstructions ? (
               <InstructionsViewer
                 instructions={currentTaskInstructions}

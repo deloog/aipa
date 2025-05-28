@@ -20,7 +20,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import type { AtomizedInstruction } from '../components/instructions/types'; 
 import InstructionsViewer from '../components/instructions/InstructionsViewer'; 
 
-
+//以下一行代码调试结束后删除
+console.log('[DEBUG] 页面已重新加载');
 
 
 interface Chapter {
