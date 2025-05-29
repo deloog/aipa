@@ -1,5 +1,6 @@
 // src/services/project.service.ts
-import type { PlanningDocument, FullProjectPlan, ProjectPlanSummary } from '../types/project.types'; // Chapter 和 DocumentPart 会被 PlanningDocument 间接使用
+import type { PlanningDocument, Chapter, DocumentPart } from '../pages/PlanningDocumentViewerPage'; // 假设类型定义在该文件中或可访问
+                                                                                                // 更好的做法是将这些共享类型放到例如 src/types/project.types.ts
 
 // 临时的ProjectPlan类型，应与后端Prisma模型（或其响应DTO）对齐
 // 我们先定义一个基础版本，至少包含列表展示所需字段
