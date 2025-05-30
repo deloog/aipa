@@ -1,23 +1,6 @@
 // src/services/project.service.ts
 import type { PlanningDocument, FullProjectPlan, ProjectPlanSummary } from '../types/project.types'; // Chapter 和 DocumentPart 会被 PlanningDocument 间接使用
 
-// 临时的ProjectPlan类型，应与后端Prisma模型（或其响应DTO）对齐
-// 我们先定义一个基础版本，至少包含列表展示所需字段
-export interface ProjectPlanSummary {
-  id: string;
-  projectName: string;
-  status: string; // 例如：'DRAFT', 'REQUIREMENTS_CONFIRMED', 'TECH_PLAN_GENERATED' 等
-  createdAt: string; // ISO Date string
-  updatedAt: string; // ISO Date string
-}
-
-// 用于 getProjectPlanById 的更完整类型 (模拟)
-// 理想情况下，这个 PlanningDocument 就是从后端获取的 ProjectPlan 记录中
-// requirementsSpec, technicalPlan, atomizedInstructions 等字段解析/组合而成
-export interface FullProjectPlan extends ProjectPlanSummary {
-  documentData: PlanningDocument; // 包含需求、技术规划等
-}
-
 
 // 模拟创建一个新的项目规划，并返回一个模拟的项目ID
 export const createProject = async (projectName: string): Promise<{ projectId: string }> => {
@@ -119,5 +102,7 @@ export const deleteProject = async (projectId: string): Promise<void> => {
   console.log('[API STUB] project.service.ts: project deleted (simulated).');
   return Promise.resolve();
 };
+
+// --- ^ ^ ^ ^ 新增以上函数桩 ^ ^ ^ ^ ---
 
 // --- ^ ^ ^ ^ 新增以上函数桩 ^ ^ ^ ^ ---
